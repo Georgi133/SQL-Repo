@@ -1,0 +1,29 @@
+CREATE PROCEDURE udp_award_movie (movie_title VARCHAR(50))
+BEGIN
+
+UPDATE movies as m JOIN movies_actors as ma
+ON m.id = ma.movie_id
+JOIN actors AS a ON a.id = ma.actor_id
+SET a.awards = a.awards + 1
+WHERE m.title LIKE movie_title;
+
+END
+
+
+
+CREATE PROCEDURE udp_courses_by_address (address_name VARCHAR(100))
+BEGIN
+SELECT a.name , c2.full_name,
+CASE WHEN c.bill <= 20 THEN 'Low'
+WHEN c.bill <= 30 THEN 'Medium'
+ELSE 'High'
+END as level_of_bill, c3.make, c3.condition, c4.name
+ FROM addresses as a
+JOIN courses as c ON c.from_address_id = a.id
+JOIN clients as c2 ON c2.id = c.client_id
+JOIN cars as c3 ON c3.id = c.car_id
+JOIN categories as c4 on c4.id = c3.category_id
+WHERE a.name LIKE address_name
+ORDER BY c3.make,c2.full_name;
+
+END

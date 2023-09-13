@@ -1,0 +1,4 @@
+DELETE c
+FROM countries as c
+LEFT JOIN movies as m ON m.country_id = c.id
+WHERE m.id IS NULL;

@@ -1,0 +1,28 @@
+CREATE FUNCTION udf_actor_history_movies_count(full_name VARCHAR(50)) 
+RETURNS INT
+DETERMINISTIC
+BEGIN
+
+RETURN (SELECT COUNT(ma.actor_id)
+FROM movies_actors as ma JOIN genres_movies as gm 
+ON gm.movie_id = ma.movie_id JOIN genres as g
+ON g.id = gm.genre_id
+WHERE ma.actor_id = (SELECT a.id
+FROM actors as a WHERE concat(a.first_name, ' ', a.last_name) LIKE full_name) AND g.`name` LIKE 'History'
+GROUP BY ma.actor_id);
+
+END
+
+
+CREATE FUNCTION udf_courses_by_client (phone_num VARCHAR (20))
+RETURNS INT
+DETERMINISTIC
+
+BEGIN
+
+RETURN(SELECT COUNT(*) FROM clients as c
+LEFT JOIN courses as c2 on c2.client_id = c.id
+WHERE c.phone_number LIKE phone_num
+GROUP BY c2.client_id);
+
+END
